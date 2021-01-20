@@ -6,7 +6,13 @@ namespace steam_reminder_bot
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			Console.Title = "Reminder Bot";
+
+			var bot = new Bot();
+
+			Console.WriteLine("Booting up bot...");
+
+			bot.StartUp();
 		}
 	}
 }
