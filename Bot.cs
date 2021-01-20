@@ -100,19 +100,6 @@ namespace steam_reminder_bot
 			}
 
 			Console.WriteLine("Successfully logged on.");
-
-			Console.Write("Continuing");
-
-			for(int i = 0; i < 3; i++)
-			{
-				System.Threading.Thread.Sleep(500);
-				Console.Write(".");
-			}
-			Console.WriteLine();
-
-			// Perform Actions
-
-			steamUser.LogOff();
 		}
 
 		void OnLoggedOff(SteamUser.LoggedOffCallback callback)
@@ -142,7 +129,16 @@ namespace steam_reminder_bot
 
 		void OnFriendMsg(SteamFriends.FriendMsgCallback callback)
 		{
+			if (callback.Message.Equals("shutdown"))
+			{
+				steamFriends.SendChatMessage(callback.Sender, EChatEntryType.ChatMsg, "Goodnight");
+				steamUser.LogOff();
+			}
+			else
+			{
+				steamFriends.SendChatMessage(callback.Sender, EChatEntryType.ChatMsg, "Pong");
 
+			}
 		}
 	}
 }
