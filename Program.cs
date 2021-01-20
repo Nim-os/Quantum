@@ -15,6 +15,7 @@ namespace steam_reminder_bot
 			Console.WriteLine("Booting up bot...");
 
 			bot.StartUp();
+
 		}
 	}
 }

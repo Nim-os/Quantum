@@ -33,6 +33,8 @@ namespace steam_reminder_bot
 
 		public void StartUp()
 		{
+			// Info
+
 			Console.Write("Username: ");
 
 			username = Console.ReadLine();
@@ -41,7 +43,14 @@ namespace steam_reminder_bot
 
 			password = GetHiddenConsoleInput();
 
+			Console.WriteLine();
 
+			// File
+
+			admins = FileManager.GetAdmins();
+
+
+			// Connection
 
 			manager = new CallbackManager(steamClient);
 
@@ -178,13 +187,13 @@ namespace steam_reminder_bot
 				}
 				else if (msg.StartsWith("."))
 				{
-					if(false)
+					if(admins.Find(id => id.AccountID == sender.AccountID) != null)
 					{
-
+						SendChat(sender, $"You are an admin! {sender.AccountID}");
 					}
 					else
 					{
-						SendChat(sender, "You do not have sufficient permissions to access this.");
+						SendChat(sender, $"You do not have sufficient permissions to access this. {sender.AccountID}");
 					}
 				}
 				else

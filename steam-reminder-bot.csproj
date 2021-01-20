@@ -10,4 +10,10 @@
     <PackageReference Include="SteamKit2" Version="2.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="adminlist.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
