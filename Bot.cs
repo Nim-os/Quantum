@@ -9,6 +9,12 @@ namespace steam_reminder_bot
 	{
 		#region Variables
 
+		#region Consts
+
+		const string UnrecognisedMessage = "Unrecognised message, check that your command starts with ! and is typed correctly.\nType !help for a full list of commands!";
+
+		#endregion
+
 		private SteamClient steamClient = new SteamClient();
 		private CallbackManager manager;
 		private SteamUser steamUser;
@@ -20,6 +26,8 @@ namespace steam_reminder_bot
 
 		#endregion
 
+		#region Setup and Teardown
+
 		public void StartUp()
 		{
 			Console.Write("Username: ");
@@ -28,7 +36,7 @@ namespace steam_reminder_bot
 
 			Console.Write("Password: ");
 
-			password = Console.ReadLine();
+			password = GetHiddenConsoleInput();
 
 
 
@@ -107,6 +115,8 @@ namespace steam_reminder_bot
 			Console.WriteLine($"Successfully logged off of Steam. {callback.Result}");
 		}
 
+		#endregion
+
 		void OnAccountInfo(SteamUser.AccountInfoCallback callback)
 		{
 			Console.WriteLine($"AccountInfo recieved. {callback.PersonaName} active.");
@@ -129,16 +139,75 @@ namespace steam_reminder_bot
 
 		void OnFriendMsg(SteamFriends.FriendMsgCallback callback)
 		{
-			if (callback.Message.Equals("shutdown"))
-			{
-				steamFriends.SendChatMessage(callback.Sender, EChatEntryType.ChatMsg, "Goodnight");
-				steamUser.LogOff();
-			}
-			else
-			{
-				steamFriends.SendChatMessage(callback.Sender, EChatEntryType.ChatMsg, "Pong");
 
+			if(callback.EntryType == EChatEntryType.ChatMsg)
+			{
+				string msg = callback.Message;
+				SteamID sender = callback.Sender;
+
+				// Incorrect message formatting
+				if (!msg.StartsWith("!") || msg.Equals(" "))
+				{
+					SendChat(sender, UnrecognisedMessage);
+					return;
+				}
+
+				#region Message Handling
+
+				switch (msg)
+				{
+					case "!hello":
+						SendChat(sender, "Hello!");
+						break;
+					case "!help":
+						SendChat(sender, "Available Commands:\n" +
+							"!ping, !reminder");
+						break;
+					case "!reminder":
+						SendChat(sender, "Unfortunately that service is not set up yet:( Check back later!");
+						break;
+					case "!shutdown":
+						SendChat(sender, "Goodnight...");
+						steamUser.LogOff();
+						break;
+					case "!ping":
+						SendChat(sender, "Pong!");
+						break;
+					default:
+						SendChat(sender, UnrecognisedMessage);
+						break;
+				}
+
+				#endregion
 			}
+
+		}
+
+		private void SendChat(SteamID sender, string message)
+		{
+			steamFriends.SendChatMessage(sender, EChatEntryType.ChatMsg, message);
+		}
+
+		public static string GetHiddenConsoleInput()
+		{
+			StringBuilder input = new StringBuilder();
+			while (true)
+			{
+				var key = Console.ReadKey(true);
+				if (key.Key == ConsoleKey.Enter)
+				{
+					break;
+				}
+				else if (key.Key == ConsoleKey.Backspace && input.Length > 0)
+				{
+					input.Remove(input.Length - 1, 1);
+				}
+				else if (key.Key != ConsoleKey.Backspace)
+				{
+					input.Append(key.KeyChar);
+				}
+			}
+			return input.ToString();
 		}
 	}
 }
