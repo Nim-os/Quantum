@@ -151,31 +151,34 @@ namespace steam_reminder_bot
 
 		void OnFriendMsg(SteamFriends.FriendMsgCallback callback)
 		{
+			SteamID sender = callback.Sender;
 
-			if(callback.EntryType == EChatEntryType.ChatMsg)
+			if (callback.EntryType == EChatEntryType.ChatMsg)
 			{
-				string msg = callback.Message;
-				SteamID sender = callback.Sender;
+				string command;
+				string[] arguments;
+
+				SplitCommand(out command, out arguments, callback.Message);
+
+
 
 				#region Message Handling
 
-				if (msg.StartsWith("!"))
+				#region ! commands
+
+				if (command.StartsWith("!"))
 				{
-					switch (msg)
+					switch (command)
 					{
 						case "!hello":
 							SendChat(sender, "Hello!");
 							break;
 						case "!help":
-							SendChat(sender, "Available Commands:\n" +
+							SendChat(sender, "Available commands:\n" +
 								"!ping, !reminder");
 							break;
 						case "!reminder":
 							SendChat(sender, "Unfortunately that service is not set up yet:( Check back later!");
-							break;
-						case "!shutdown":
-							SendChat(sender, "Goodnight...");
-							steamUser.LogOff();
 							break;
 						case "!ping":
 							SendChat(sender, "Pong!");
@@ -185,17 +188,41 @@ namespace steam_reminder_bot
 							break;
 					}
 				}
-				else if (msg.StartsWith("."))
+				#endregion
+				#region . commands
+				else if (command.StartsWith("."))
 				{
 					if(admins.Find(id => id.AccountID == sender.AccountID) != null)
 					{
-						SendChat(sender, $"You are an admin! {sender.AccountID}");
+						switch (command)
+						{
+							case ".":
+								SendChat(sender, $"You are an admin! Welcome back {sender.AccountID}.");
+								break;
+							case ".help":
+								SendChat(sender, "Admin commands:\n" +
+									".shutdown -\\-\\ Shutdown the bot" +
+									".restart -\\-\\ Restart the bot" +
+									".log -\\-\\ Logs a message to the bot's console.");
+								break;
+							case ".shutdown":
+								SendChat(sender, "Goodnight...");
+								steamUser.LogOff();
+								break;
+							case ".restart":
+								SendChat(sender, "Attempting to restart bot. <Command not yet implemented>");
+								break;
+							default:
+								SendChat(sender, "Invalid command.");
+								break;
+						}
 					}
 					else
 					{
-						SendChat(sender, $"You do not have sufficient permissions to access this. {sender.AccountID}");
+						SendChat(sender, $"You do not have sufficient permissions to access this.");
 					}
 				}
+				#endregion
 				else
 				{
 					SendChat(sender, UnrecognisedMessage);
@@ -232,6 +259,27 @@ namespace steam_reminder_bot
 				}
 			}
 			return input.ToString();
+		}
+
+		private static void SplitCommand(out string command, out string[] arguments, string message)
+		{
+			int index = 0;
+
+			foreach (char c in message)
+			{
+				if (c == ' ')
+				{
+					break;
+				}
+
+				index += 1;
+			}
+
+			command = message.Substring(0, index);
+
+			message = message.Substring(index);
+
+			arguments = message.Split(' ');
 		}
 	}
 }
