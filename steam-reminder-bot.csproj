@@ -6,4 +6,8 @@
     <RootNamespace>steam_reminder_bot</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SteamKit2" Version="2.3.0" />
+  </ItemGroup>
+
 </Project>
