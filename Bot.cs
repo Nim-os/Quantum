@@ -90,6 +90,14 @@ namespace steam_reminder_bot
 
 			Console.WriteLine("Successfully logged on.");
 
+			Console.Write("Continuing");
+
+			for(int i = 0; i < 3; i++)
+			{
+				System.Threading.Thread.Sleep(650);
+				Console.Write(".");
+			}
+
 			// Perform Actions
 
 			steamUser.LogOff();
