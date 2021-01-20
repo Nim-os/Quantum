@@ -24,6 +24,9 @@ namespace steam_reminder_bot
 
 		private bool isRunning;
 
+		private List<SteamID> admins;
+
+
 		#endregion
 
 		#region Setup and Teardown
@@ -145,38 +148,50 @@ namespace steam_reminder_bot
 				string msg = callback.Message;
 				SteamID sender = callback.Sender;
 
-				// Incorrect message formatting
-				if (!msg.StartsWith("!") || msg.Equals(" "))
-				{
-					SendChat(sender, UnrecognisedMessage);
-					return;
-				}
-
 				#region Message Handling
 
-				switch (msg)
+				if (msg.StartsWith("!"))
 				{
-					case "!hello":
-						SendChat(sender, "Hello!");
-						break;
-					case "!help":
-						SendChat(sender, "Available Commands:\n" +
-							"!ping, !reminder");
-						break;
-					case "!reminder":
-						SendChat(sender, "Unfortunately that service is not set up yet:( Check back later!");
-						break;
-					case "!shutdown":
-						SendChat(sender, "Goodnight...");
-						steamUser.LogOff();
-						break;
-					case "!ping":
-						SendChat(sender, "Pong!");
-						break;
-					default:
-						SendChat(sender, UnrecognisedMessage);
-						break;
+					switch (msg)
+					{
+						case "!hello":
+							SendChat(sender, "Hello!");
+							break;
+						case "!help":
+							SendChat(sender, "Available Commands:\n" +
+								"!ping, !reminder");
+							break;
+						case "!reminder":
+							SendChat(sender, "Unfortunately that service is not set up yet:( Check back later!");
+							break;
+						case "!shutdown":
+							SendChat(sender, "Goodnight...");
+							steamUser.LogOff();
+							break;
+						case "!ping":
+							SendChat(sender, "Pong!");
+							break;
+						default:
+							SendChat(sender, UnrecognisedMessage);
+							break;
+					}
 				}
+				else if (msg.StartsWith("."))
+				{
+					if(false)
+					{
+
+					}
+					else
+					{
+						SendChat(sender, "You do not have sufficient permissions to access this.");
+					}
+				}
+				else
+				{
+					SendChat(sender, UnrecognisedMessage);
+				}
+				
 
 				#endregion
 			}
