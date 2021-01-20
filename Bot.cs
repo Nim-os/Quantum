@@ -131,7 +131,7 @@ namespace steam_reminder_bot
 
 		void OnAccountInfo(SteamUser.AccountInfoCallback callback)
 		{
-			Console.WriteLine($"AccountInfo recieved. {callback.PersonaName} active.");
+			Console.WriteLine($"AccountInfo recieved. {callback.PersonaName} is active.");
 
 			steamFriends.SetPersonaState(EPersonaState.Online);
 		}
@@ -201,9 +201,10 @@ namespace steam_reminder_bot
 								break;
 							case ".help":
 								SendChat(sender, "Admin commands:\n" +
-									".shutdown -\\-\\ Shutdown the bot" +
-									".restart -\\-\\ Restart the bot" +
-									".log -\\-\\ Logs a message to the bot's console.");
+									".shutdown -\\-\\ Shutdown the bot.\n" +
+									".restart -\\-\\ Restart the bot.\n" +
+									".log -\\-\\ Logs a message to the bot's console.\n" +
+									".echo -\\-\\ Echos back a message.\n");
 								break;
 							case ".shutdown":
 								SendChat(sender, "Goodnight...");
@@ -211,6 +212,17 @@ namespace steam_reminder_bot
 								break;
 							case ".restart":
 								SendChat(sender, "Attempting to restart bot. <Command not yet implemented>");
+								break;
+							case ".log":
+								SendChat(sender, "Command not yet implemented.");
+								break;
+							case ".echo":
+								var str = new StringBuilder();
+								foreach (string arg in arguments)
+								{
+									str.Append($"{arg} ");
+								}
+								SendChat(sender, str.ToString());
 								break;
 							default:
 								SendChat(sender, "Invalid command.");
@@ -239,6 +251,8 @@ namespace steam_reminder_bot
 			steamFriends.SendChatMessage(sender, EChatEntryType.ChatMsg, message);
 		}
 
+		#region Helper Functions
+
 		public static string GetHiddenConsoleInput()
 		{
 			StringBuilder input = new StringBuilder();
@@ -261,7 +275,7 @@ namespace steam_reminder_bot
 			return input.ToString();
 		}
 
-		private static void SplitCommand(out string command, out string[] arguments, string message)
+		public static void SplitCommand(out string command, out string[] arguments, string message)
 		{
 			int index = 0;
 
@@ -281,5 +295,7 @@ namespace steam_reminder_bot
 
 			arguments = message.Split(' ');
 		}
+
+		#endregion
 	}
 }
