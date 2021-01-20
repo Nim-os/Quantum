@@ -37,8 +37,8 @@ namespace steam_reminder_bot
 			manager.Subscribe<SteamClient.ConnectedCallback>(OnConnected);
 			manager.Subscribe<SteamClient.DisconnectedCallback>(OnDisconnected);
 
-			manager.Subscribe<SteamClient.LoggedOnCallback>(OnLoggedOn);
-			manager.Subscribe<SteamClient.LoggedOffCallback>(OnLoggedOff);
+			manager.Subscribe<SteamUser.LoggedOnCallback>(OnLoggedOn);
+			manager.Subscribe<SteamUser.LoggedOffCallback>(OnLoggedOff);
 
 			Console.WriteLine("Connecting to Steam...");
 
@@ -48,26 +48,56 @@ namespace steam_reminder_bot
 			{
 				manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
 			}
+
+			Console.WriteLine("Bot ended successfully.");
 		}
 
 		void OnConnected(SteamClient.ConnectedCallback callback)
 		{
+			Console.WriteLine($"Successfully connected to Steam.\nLogging in {username}");
 
+			steamUser.LogOn(new SteamUser.LogOnDetails
+			{
+				Username = username,
+				Password = password
+			});
 		}
 
-		void OnDisonnected(SteamClient.DisconnectedCallback callback)
+		void OnDisconnected(SteamClient.DisconnectedCallback callback)
 		{
+			Console.WriteLine($"Successfully disconnected from Steam.");
 
+			isRunning = false;
 		}
 
 		void OnLoggedOn(SteamUser.LoggedOnCallback callback)
 		{
+			if(callback.Result != EResult.OK)
+			{
+				switch(callback.Result)
+				{
+					case EResult.AccountLogonDenied:
+						Console.WriteLine("ERROR: Logon denied, SteamGuard required.");
+						break;
+					default:
+						Console.WriteLine($"ERROR: Could not logon to Steam.\n{callback.Result}\n{callback.ExtendedResult}");
+						break;
+				}
 
+				isRunning = false;
+				return;
+			}
+
+			Console.WriteLine("Successfully logged on.");
+
+			// Perform Actions
+
+			steamUser.LogOff();
 		}
 
 		void OnLoggedOff(SteamUser.LoggedOffCallback callback)
 		{
-
+			Console.WriteLine($"Successfully logged off of Steam. {callback.Result}");
 		}
 
 	}
