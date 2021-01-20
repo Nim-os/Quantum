@@ -12,6 +12,7 @@ namespace steam_reminder_bot
 		private SteamClient steamClient = new SteamClient();
 		private CallbackManager manager;
 		private SteamUser steamUser;
+		private SteamFriends steamFriends;
 
 		private string username, password;
 
@@ -30,17 +31,27 @@ namespace steam_reminder_bot
 			password = Console.ReadLine();
 
 
+
 			manager = new CallbackManager(steamClient);
 
 			steamUser = steamClient.GetHandler<SteamUser>();
+
+			steamFriends = steamClient.GetHandler<SteamFriends>();
 
 			manager.Subscribe<SteamClient.ConnectedCallback>(OnConnected);
 			manager.Subscribe<SteamClient.DisconnectedCallback>(OnDisconnected);
 
 			manager.Subscribe<SteamUser.LoggedOnCallback>(OnLoggedOn);
 			manager.Subscribe<SteamUser.LoggedOffCallback>(OnLoggedOff);
+			manager.Subscribe<SteamUser.AccountInfoCallback>(OnAccountInfo);
+
+			manager.Subscribe<SteamFriends.FriendsListCallback>(OnFriendsList);
+			manager.Subscribe<SteamFriends.FriendMsgCallback>(OnFriendMsg);
+
 
 			Console.WriteLine("Connecting to Steam...");
+
+			steamClient.Connect();
 
 			isRunning = true;
 
@@ -94,9 +105,10 @@ namespace steam_reminder_bot
 
 			for(int i = 0; i < 3; i++)
 			{
-				System.Threading.Thread.Sleep(650);
+				System.Threading.Thread.Sleep(500);
 				Console.Write(".");
 			}
+			Console.WriteLine();
 
 			// Perform Actions
 
@@ -108,5 +120,29 @@ namespace steam_reminder_bot
 			Console.WriteLine($"Successfully logged off of Steam. {callback.Result}");
 		}
 
+		void OnAccountInfo(SteamUser.AccountInfoCallback callback)
+		{
+			Console.WriteLine($"AccountInfo recieved. {callback.PersonaName} active.");
+
+			steamFriends.SetPersonaState(EPersonaState.Online);
+		}
+
+		void OnFriendsList(SteamFriends.FriendsListCallback callback)
+		{
+			foreach (var friend in callback.FriendList)
+			{
+				Console.WriteLine($"Friend: {friend.SteamID}");
+
+				if (friend.Relationship == EFriendRelationship.RequestRecipient)
+				{
+					steamFriends.AddFriend(friend.SteamID);
+				}
+			}
+		}
+
+		void OnFriendMsg(SteamFriends.FriendMsgCallback callback)
+		{
+
+		}
 	}
 }

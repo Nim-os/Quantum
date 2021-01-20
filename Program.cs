@@ -6,6 +6,8 @@ namespace steam_reminder_bot
 	{
 		static void Main(string[] args)
 		{
+			Console.ForegroundColor = ConsoleColor.White;
+
 			Console.Title = "Reminder Bot";
 
 			var bot = new Bot();
