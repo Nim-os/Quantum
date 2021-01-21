@@ -343,6 +343,8 @@ namespace steam_reminder_bot
 						args.Add(str.ToString());
 
 						str.Clear();
+
+						index += 1;
 					}
 
 					continue;
