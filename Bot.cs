@@ -35,15 +35,30 @@ namespace steam_reminder_bot
 		{
 			// Info
 
-			Console.Write("Username: ");
+			LoginInfo? loginInfo = FileManager.GetSecret();
 
-			username = Console.ReadLine();
+			if (loginInfo.HasValue)
+			{
+				Console.WriteLine("Logging in via secret.txt.");
 
-			Console.Write("Password: ");
+				username = loginInfo.Value.user;
+				password = loginInfo.Value.pass;
+			}
+			else
+			{
+				Console.WriteLine("Unable to load secret.txt.");
 
-			password = GetHiddenConsoleInput();
+				Console.Write("Username: ");
 
-			Console.WriteLine();
+				username = Console.ReadLine();
+
+				Console.Write("Password: ");
+
+				password = GetHiddenConsoleInput();
+
+				Console.WriteLine();
+			}
+
 
 			// File
 
@@ -85,7 +100,7 @@ namespace steam_reminder_bot
 
 		void OnConnected(SteamClient.ConnectedCallback callback)
 		{
-			Console.WriteLine($"Successfully connected to Steam.\nLogging in {username}");
+			Console.WriteLine($"Connected to Steam.\nLogging in {username}");
 
 			steamUser.LogOn(new SteamUser.LogOnDetails
 			{
