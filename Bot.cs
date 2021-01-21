@@ -171,9 +171,10 @@ namespace steam_reminder_bot
 			if (callback.EntryType == EChatEntryType.ChatMsg)
 			{
 				string command;
+				string[] options;
 				string[] arguments;
 
-				SplitCommand(out command, out arguments, callback.Message);
+				SplitCommand(out command, out options, out arguments, callback.Message);
 
 
 
@@ -297,7 +298,7 @@ namespace steam_reminder_bot
 			return input.ToString();
 		}
 
-		public static void SplitCommand(out string command, out string[] arguments, string message)
+		public static void SplitCommand(out string command, out string[] options, out string[] arguments, string message)
 		{
 			int index = 0;
 
@@ -310,12 +311,46 @@ namespace steam_reminder_bot
 
 				index += 1;
 			}
-
+			
 			command = message.Substring(0, index);
 
-			message = message.Substring(index);
+			List<string> ops = new List<string>();
+			List<string> args = new List<string>();
 
-			arguments = message.Split(' ');
+			var str = new StringBuilder();
+			
+			bool invertedCommas = false;
+
+			for (; index < message.Length; index++)
+			{
+				if (message[index] == '\"')
+				{
+					invertedCommas = !invertedCommas;
+
+					if (!invertedCommas) // End of phrase
+					{
+						args.Add(str.ToString());
+
+						str.Clear();
+					}
+
+					continue;
+				}
+				else if (message[index] == ' ' && !invertedCommas)
+				{
+					args.Add(str.ToString());
+
+					str.Clear();
+
+					continue;
+				}
+
+				str.Append(message[index]);
+			}
+
+			options = ops.ToArray(); // TODO
+
+			arguments = args.ToArray();
 		}
 
 		public static string CompressStrings(params string[] strings)
