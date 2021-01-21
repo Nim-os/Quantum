@@ -247,6 +247,15 @@ namespace steam_reminder_bot
 								SendChat(sender, CompressStrings(arguments));
 								break;
 
+							case ".debug":
+								var args = new StringBuilder();
+								foreach (string arg in arguments)
+								{
+									args.Append($"{arg}\n");
+								}
+								SendChat(sender, $"Command:\n{command}\n\nOptions:\nTODO\n\nArguments:\n{args}");
+								break;
+
 							default:
 								SendChat(sender, "Invalid command.");
 								break;
@@ -320,6 +329,8 @@ namespace steam_reminder_bot
 			var str = new StringBuilder();
 			
 			bool invertedCommas = false;
+			
+			index += 1;
 
 			for (; index < message.Length; index++)
 			{
@@ -347,6 +358,8 @@ namespace steam_reminder_bot
 
 				str.Append(message[index]);
 			}
+
+			args.Add(str.ToString());
 
 			options = ops.ToArray(); // TODO
 
