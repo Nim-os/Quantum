@@ -8,7 +8,41 @@ namespace steam_reminder_bot
 {
 	static class FileManager
 	{
+		private const string secretPath = "secret.txt";
 		private const string adminListPath = "adminlist.txt";
+
+
+		public static LoginInfo? GetSecret()
+		{
+			if(!File.Exists(secretPath))
+			{
+				return null;
+			}
+
+			LoginInfo info = new LoginInfo();
+
+			var reader = File.ReadLines(secretPath).GetEnumerator();
+
+			if (reader.MoveNext())
+			{
+				info.user = reader.Current;
+
+				if (reader.MoveNext())
+				{
+					info.pass = reader.Current;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			else
+			{
+				return null;
+			}
+
+			return info;
+		}
 
 
 		public static List<SteamID> GetAdmins()
@@ -27,5 +61,11 @@ namespace steam_reminder_bot
 
 			return ret;
 		}
+	}
+
+	struct LoginInfo
+	{
+		public string user;
+		public string pass;
 	}
 }
