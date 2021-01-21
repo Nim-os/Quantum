@@ -111,7 +111,7 @@ namespace steam_reminder_bot
 
 		void OnDisconnected(SteamClient.DisconnectedCallback callback)
 		{
-			Console.WriteLine($"Successfully disconnected from Steam.");
+			Console.WriteLine($"Disconnected from Steam.");
 
 			isRunning = false;
 		}
@@ -148,7 +148,7 @@ namespace steam_reminder_bot
 		{
 			Console.WriteLine($"AccountInfo recieved. {callback.PersonaName} is active.");
 
-			steamFriends.SetPersonaState(EPersonaState.Online);
+			//steamFriends.SetPersonaState(EPersonaState.Online);
 		}
 
 		void OnFriendsList(SteamFriends.FriendsListCallback callback)
@@ -188,22 +188,27 @@ namespace steam_reminder_bot
 						case "!hello":
 							SendChat(sender, "Hello!");
 							break;
+
 						case "!help":
 							SendChat(sender, "Available commands:\n" +
 								"!ping, !reminder");
 							break;
+
 						case "!reminder":
 							SendChat(sender, "Unfortunately that service is not set up yet:( Check back later!");
 							break;
+
 						case "!ping":
 							SendChat(sender, "Pong!");
 							break;
+
 						default:
 							SendChat(sender, UnrecognisedMessage);
 							break;
 					}
 				}
 				#endregion
+
 				#region . commands
 				else if (command.StartsWith("."))
 				{
@@ -214,6 +219,7 @@ namespace steam_reminder_bot
 							case ".":
 								SendChat(sender, $"You are an admin! Welcome back {sender.AccountID}.");
 								break;
+
 							case ".help":
 								SendChat(sender, "Admin commands:\n" +
 									".shutdown -\\-\\ Shutdown the bot.\n" +
@@ -221,24 +227,25 @@ namespace steam_reminder_bot
 									".log -\\-\\ Logs a message to the bot's console.\n" +
 									".echo -\\-\\ Echos back a message.\n");
 								break;
+
 							case ".shutdown":
 								SendChat(sender, "Goodnight...");
 								steamUser.LogOff();
 								break;
+
 							case ".restart":
 								SendChat(sender, "Attempting to restart bot. <Command not yet implemented>");
 								break;
+
 							case ".log":
-								SendChat(sender, "Command not yet implemented.");
+								Console.WriteLine($"{sender} at {System.DateTime.Now}: {CompressStrings(arguments)}");
+								SendChat(sender, "Message logged.");
 								break;
+
 							case ".echo":
-								var str = new StringBuilder();
-								foreach (string arg in arguments)
-								{
-									str.Append($"{arg} ");
-								}
-								SendChat(sender, str.ToString());
+								SendChat(sender, CompressStrings(arguments));
 								break;
+
 							default:
 								SendChat(sender, "Invalid command.");
 								break;
@@ -309,6 +316,18 @@ namespace steam_reminder_bot
 			message = message.Substring(index);
 
 			arguments = message.Split(' ');
+		}
+
+		public static string CompressStrings(params string[] strings)
+		{
+			var str = new StringBuilder();
+
+			foreach (string arg in strings)
+			{
+				str.Append($"{arg} ");
+			}
+
+			return str.ToString();
 		}
 
 		#endregion
