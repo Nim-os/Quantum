@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace steam_reminder_bot
 {
-	
+	// Can later change to Action<callback, options, arguments) if it makes a difference
 	public delegate void Command(SteamKit2.SteamFriends.FriendMsgCallback callback, string[] options, string[] arguments);
 
 	public static class CommandList
@@ -89,13 +89,13 @@ namespace steam_reminder_bot
 			
 			commands.Add(".log", (callback, options, arguments) =>
 			{
-				Console.WriteLine($"{callback.Sender} at {System.DateTime.Now}: {Bot.CompressStrings(arguments)}");
+				Console.WriteLine($"{callback.Sender} at {System.DateTime.Now}: {Utility.CompressStrings(arguments)}");
 				Bot.SendChat(callback.Sender, "Message logged.");
 			});
 			
 			commands.Add(".echo", (callback, options, arguments) =>
 			{
-				Bot.SendChat(callback.Sender, Bot.CompressStrings(arguments));
+				Bot.SendChat(callback.Sender, Utility.CompressStrings(arguments));
 			});
 
 			commands.Add(".debug", (callback, options, arguments) =>
