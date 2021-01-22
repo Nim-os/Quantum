@@ -174,50 +174,30 @@ namespace steam_reminder_bot
 			if (callback.EntryType == EChatEntryType.ChatMsg)
 			{
 
-				SplitCommand(out string command, out string[] options, out string[] arguments, callback.Message);
+				SplitCommand(out string commandName, out string[] options, out string[] arguments, callback.Message);
 
-				command = command.ToLower();
+				commandName = commandName.ToLower();
 
 				#region Message Handling
 
 
-				if (command.StartsWith("!") && CommandList.RegularCommands().TryGetValue(command, out Command val))
+				Command command;
+
+				if (commandName.StartsWith("!") && CommandList.RegularList.TryGetValue(commandName, out command))
 				{
-					val(callback, options, arguments);
+					command(callback, options, arguments);
 				}
-				else if (command.StartsWith("."))
+				else if (commandName.StartsWith("."))
 				{
 					if(admins.Find(id => id.AccountID == sender.AccountID) != null)
 					{
-						switch (command)
+						if (CommandList.AdminList.TryGetValue(commandName, out command))
 						{
-							case ".":
-								SendChat(sender, $"You are an admin! Welcome back {sender.AccountID}.");
-								break;
-
-							case ".help":
-								break;
-
-							case ".shutdown":
-								break;
-
-							case ".restart":
-								break;
-
-							case ".log":
-								
-								break;
-
-							case ".echo":
-								
-								break;
-
-							case ".debug":
-								break;
-
-							default:
-								SendChat(sender, "Invalid command.");
-								break;
+							command(callback, options, arguments);
+						}
+						else
+						{
+							SendChat(sender, "Invalid command.");
 						}
 					}
 					else

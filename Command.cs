@@ -10,6 +10,9 @@ namespace steam_reminder_bot
 
 	public static class CommandList
 	{
+		public static Dictionary<string, Command> RegularList = RegularCommands();
+		public static Dictionary<string, Command> AdminList = AdminCommands();
+
 		/* Command template
 		 * 
 		commands.Add("!.", (callback, options, arguments) =>
@@ -17,7 +20,7 @@ namespace steam_reminder_bot
 
 		});
 		*/
-		public static Dictionary<string, Command> RegularCommands()
+		private static Dictionary<string, Command> RegularCommands()
 		{
 			Dictionary<string, Command> commands = new Dictionary<string, Command>();
 
@@ -55,9 +58,14 @@ namespace steam_reminder_bot
 			return commands;
 		}*/
 
-		public static Dictionary<string, Command> AdminCommands()
+		private static Dictionary<string, Command> AdminCommands()
 		{
 			Dictionary<string, Command> commands = new Dictionary<string, Command>();
+
+			commands.Add(".", (callback, options, arguments) =>
+			{
+				Bot.SendChat(callback.Sender, $"You are an admin! Welcome back {callback.Sender.AccountID}.");
+			});
 
 			commands.Add(".help", (callback, options, arguments) =>
 			{
@@ -66,7 +74,6 @@ namespace steam_reminder_bot
 					".restart -\\-\\ Restart the bot.\n" +
 					".log -\\-\\ Logs a message to the bot's console.\n" +
 					".echo -\\-\\ Echos back a message.\n");
-				return;
 			});
 
 			commands.Add(".shutdown", (callback, options, arguments) =>
