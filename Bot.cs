@@ -15,10 +15,10 @@ namespace steam_reminder_bot
 
 		#endregion
 
-		private SteamClient steamClient = new SteamClient();
-		private CallbackManager manager;
-		private SteamUser steamUser;
-		private SteamFriends steamFriends;
+		public static SteamClient steamClient = new SteamClient();
+		public static CallbackManager manager;
+		public static SteamUser steamUser;
+		public static SteamFriends steamFriends;
 
 		private string username, password;
 
@@ -73,6 +73,8 @@ namespace steam_reminder_bot
 
 			steamFriends = steamClient.GetHandler<SteamFriends>();
 
+			#region Callbacks
+
 			manager.Subscribe<SteamClient.ConnectedCallback>(OnConnected);
 			manager.Subscribe<SteamClient.DisconnectedCallback>(OnDisconnected);
 
@@ -83,6 +85,7 @@ namespace steam_reminder_bot
 			manager.Subscribe<SteamFriends.FriendsListCallback>(OnFriendsList);
 			manager.Subscribe<SteamFriends.FriendMsgCallback>(OnFriendMsg);
 
+			#endregion
 
 			Console.WriteLine("Connecting to Steam...");
 
@@ -170,47 +173,18 @@ namespace steam_reminder_bot
 
 			if (callback.EntryType == EChatEntryType.ChatMsg)
 			{
-				string command;
-				string[] options;
-				string[] arguments;
 
-				SplitCommand(out command, out options, out arguments, callback.Message);
+				SplitCommand(out string command, out string[] options, out string[] arguments, callback.Message);
 
-
+				command = command.ToLower();
 
 				#region Message Handling
 
-				#region ! commands
 
-				if (command.StartsWith("!"))
+				if (command.StartsWith("!") && CommandList.RegularCommands().TryGetValue(command, out Command val))
 				{
-					switch (command)
-					{
-						case "!hello":
-							SendChat(sender, "Hello!");
-							break;
-
-						case "!help":
-							SendChat(sender, "Available commands:\n" +
-								"!ping, !reminder");
-							break;
-
-						case "!reminder":
-							SendChat(sender, "Unfortunately that service is not set up yet:( Check back later!");
-							break;
-
-						case "!ping":
-							SendChat(sender, "Pong!");
-							break;
-
-						default:
-							SendChat(sender, UnrecognisedMessage);
-							break;
-					}
+					val(callback, options, arguments);
 				}
-				#endregion
-
-				#region . commands
 				else if (command.StartsWith("."))
 				{
 					if(admins.Find(id => id.AccountID == sender.AccountID) != null)
@@ -222,38 +196,23 @@ namespace steam_reminder_bot
 								break;
 
 							case ".help":
-								SendChat(sender, "Admin commands:\n" +
-									".shutdown -\\-\\ Shutdown the bot.\n" +
-									".restart -\\-\\ Restart the bot.\n" +
-									".log -\\-\\ Logs a message to the bot's console.\n" +
-									".echo -\\-\\ Echos back a message.\n");
 								break;
 
 							case ".shutdown":
-								SendChat(sender, "Goodnight...");
-								steamUser.LogOff();
 								break;
 
 							case ".restart":
-								SendChat(sender, "Attempting to restart bot. <Command not yet implemented>");
 								break;
 
 							case ".log":
-								Console.WriteLine($"{sender} at {System.DateTime.Now}: {CompressStrings(arguments)}");
-								SendChat(sender, "Message logged.");
+								
 								break;
 
 							case ".echo":
-								SendChat(sender, CompressStrings(arguments));
+								
 								break;
 
 							case ".debug":
-								var args = new StringBuilder();
-								foreach (string arg in arguments)
-								{
-									args.Append($"{arg}\n");
-								}
-								SendChat(sender, $"Command:\n{command}\n\nOptions:\nTODO\n\nArguments:\n{args}");
 								break;
 
 							default:
@@ -266,7 +225,6 @@ namespace steam_reminder_bot
 						SendChat(sender, $"You do not have sufficient permissions to access this.");
 					}
 				}
-				#endregion
 				else
 				{
 					SendChat(sender, UnrecognisedMessage);
@@ -278,10 +236,14 @@ namespace steam_reminder_bot
 
 		}
 
-		private void SendChat(SteamID sender, string message)
+		#region Actions
+
+		public static void SendChat(SteamID sender, string message)
 		{
 			steamFriends.SendChatMessage(sender, EChatEntryType.ChatMsg, message);
 		}
+
+		#endregion
 
 		#region Helper Functions
 
