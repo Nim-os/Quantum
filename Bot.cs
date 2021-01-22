@@ -15,6 +15,8 @@ namespace steam_reminder_bot
 
 		#endregion
 
+		public static Bot instance = null;
+
 		public static SteamClient steamClient = new SteamClient();
 		public static CallbackManager manager;
 		public static SteamUser steamUser;
@@ -29,10 +31,21 @@ namespace steam_reminder_bot
 
 		#endregion
 
+
 		#region Setup and Teardown
 
 		public void StartUp()
 		{
+			if (instance == null)
+			{
+				instance = this;
+			}
+			else
+			{
+				Console.WriteLine($"ERROR: Bot already running.");
+				return;
+			}
+
 			// Info
 
 			LoginInfo? loginInfo = FileManager.GetSecret();
