@@ -51,7 +51,7 @@ namespace steam_reminder_bot
 		}
 
 
-		public static List<SteamID> GetAdmins()
+		public static List<SteamID> GetAdmins() // Change to generic UInt64
 		{
 			List<SteamID> ret = new List<SteamID>();
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace steam_reminder_bot
 {
 	// Can later change to Action<callback, options, arguments) if it makes a difference
-	public delegate void Command(SteamKit2.SteamFriends.FriendMsgCallback callback, string[] options, string[] arguments);
+	public delegate void Command(SteamKit2.SteamFriends.FriendMsgCallback callback, string options, string[] arguments);
 
 	public static class CommandList
 	{
@@ -105,7 +105,7 @@ namespace steam_reminder_bot
 				{
 					args.Append($"{arg}\n");
 				}
-				Bot.SendChat(callback.Sender, $"Options:\nTODO\n\nArguments:\n{args}");
+				Bot.SendChat(callback.Sender, $"Options:\n{options}\n\nArguments:\n{args}");
 			});
 
 			return commands;

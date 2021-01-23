@@ -28,9 +28,10 @@ namespace steam_reminder_bot
 			return input.ToString();
 		}
 
-		public static void SplitCommand(out string command, out string[] options, out string[] arguments, string message)
+		public static void SplitCommand(out string command, out string options, out string[] arguments, string message)
 		{
 			int index = 0;
+			options = "";
 
 			foreach (char c in message)
 			{
@@ -44,18 +45,24 @@ namespace steam_reminder_bot
 
 			command = message.Substring(0, index);
 
-			List<string> ops = new List<string>();
 			List<string> args = new List<string>();
 
 			var str = new StringBuilder();
 
-			bool invertedCommas = false;
+			bool invertedCommas = false, option = false;
 
 			index += 1;
 
 			for (; index < message.Length; index++)
 			{
-				if (message[index] == '\"')
+				if (message[index] == '-' && !invertedCommas && message[index - 1] == ' ') // [index - 1] might not be safe! Though theoretically should be fine
+				{ // To note, with this implementation, cannot do words as options or risk letters falsely identifying other options.
+					option = true;
+
+					continue;
+				}
+
+				if (message[index] == '\"' && !option)
 				{
 					invertedCommas = !invertedCommas;
 
@@ -72,6 +79,13 @@ namespace steam_reminder_bot
 				}
 				else if (char.IsWhiteSpace(message[index]) && !invertedCommas)
 				{
+					if (option)
+					{
+						option = false;
+
+						continue;
+					}
+
 					args.Add(str.ToString());
 
 					str.Clear();
@@ -79,12 +93,17 @@ namespace steam_reminder_bot
 					continue;
 				}
 
-				str.Append(message[index]);
+				if (option)
+				{
+					options += message[index];
+				}
+				else
+				{
+					str.Append(message[index]);
+				}
 			}
 
 			args.Add(str.ToString());
-
-			options = ops.ToArray(); // TODO
 
 			arguments = args.ToArray();
 		}

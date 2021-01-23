@@ -187,7 +187,7 @@ namespace steam_reminder_bot
 			if (callback.EntryType == EChatEntryType.ChatMsg)
 			{
 
-				Utility.SplitCommand(out string commandName, out string[] options, out string[] arguments, callback.Message);
+				Utility.SplitCommand(out string commandName, out string options, out string[] arguments, callback.Message);
 
 				commandName = commandName.ToLower();
 
