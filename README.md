@@ -1,4 +1,4 @@
-# steam-reminder-bot
+# mastodonte-bot
 Steam bot swiss army knife to give people what they need without tabbing out.\
 The [Bot's Profile](https://steamcommunity.com/profiles/76561199132445472/).
 
