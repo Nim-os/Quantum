@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace steam_reminder_bot
+namespace mastodonte_bot
 {
 	class Program
 	{

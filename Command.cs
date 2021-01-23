@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace steam_reminder_bot
+namespace mastodonte_bot
 {
 	// Can later change to Action<callback, options, arguments) if it makes a difference
 	public delegate void Command(SteamKit2.SteamFriends.FriendMsgCallback callback, string options, string[] arguments);

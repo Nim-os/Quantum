@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SteamKit2;
 
-namespace steam_reminder_bot
+namespace mastodonte_bot
 {
 	public class Bot
 	{

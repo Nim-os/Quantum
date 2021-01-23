@@ -4,7 +4,7 @@ using System.Text;
 using SteamKit2;
 using System.IO;
 
-namespace steam_reminder_bot
+namespace mastodonte_bot
 {
 	struct LoginInfo
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace steam_reminder_bot
+namespace mastodonte_bot
 {
 	static class Utility
 	{
