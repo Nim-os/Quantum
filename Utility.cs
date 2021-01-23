@@ -4,7 +4,7 @@ using System.Text;
 
 namespace steam_reminder_bot
 {
-	class Utility
+	static class Utility
 	{
 		public static string GetHiddenConsoleInput()
 		{
@@ -34,7 +34,7 @@ namespace steam_reminder_bot
 
 			foreach (char c in message)
 			{
-				if (c == ' ')
+				if (char.IsWhiteSpace(c))
 				{
 					break;
 				}
@@ -70,7 +70,7 @@ namespace steam_reminder_bot
 
 					continue;
 				}
-				else if (message[index] == ' ' && !invertedCommas)
+				else if (char.IsWhiteSpace(message[index]) && !invertedCommas)
 				{
 					args.Add(str.ToString());
 
@@ -99,6 +99,13 @@ namespace steam_reminder_bot
 			}
 
 			return str.ToString();
+		}
+
+		public static string Sanitise()
+		{
+			// TODO
+			
+			return "";
 		}
 	}
 }

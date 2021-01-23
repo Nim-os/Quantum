@@ -6,6 +6,12 @@ using System.IO;
 
 namespace steam_reminder_bot
 {
+	struct LoginInfo
+	{
+		public string user;
+		public string pass;
+	}
+
 	static class FileManager
 	{
 		private const string secretPath = "secret.txt";
@@ -61,11 +67,11 @@ namespace steam_reminder_bot
 
 			return ret;
 		}
+
+		//public static void UpdateEntry(SteamID user, Reminder reminder)
+		//Run through each line
+
+		//public static bool RemoveEntry(SteamID user)
 	}
 
-	struct LoginInfo
-	{
-		public string user;
-		public string pass;
-	}
 }

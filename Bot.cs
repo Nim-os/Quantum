@@ -236,6 +236,8 @@ namespace steam_reminder_bot
 			steamFriends.SendChatMessage(sender, EChatEntryType.ChatMsg, message);
 		}
 
+		// Mass announcement to friends list action? Risky.
+
 		#endregion
 
 	}
