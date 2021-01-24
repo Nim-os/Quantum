@@ -24,7 +24,7 @@ namespace mastodonte_bot
 		public static SteamUser steamUser;
 		public static SteamFriends steamFriends;
 
-		public static List<User> activeUsers = new List<User>(); // Maybe change to dict later
+		public static List<User> activeUsers = new List<User>(); // Maybe change to dict later. Would be good to overwrite if multiple of same user
 
 		#endregion
 
@@ -114,8 +114,6 @@ namespace mastodonte_bot
 			while(isRunning)
 			{
 				manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
-
-				HandleUsers();
 			}
 
 			Console.WriteLine("Bot ended successfully.");
@@ -239,12 +237,20 @@ namespace mastodonte_bot
 
 		#region Handling
 
-		private void HandleUsers()
+		public static void HandleReminder(User user)
 		{
-			foreach (User user in activeUsers)
+			if (user != null)
 			{
-				
+				SendChat(user.userID, $"Reminder: {user.reminder.Value.message}");
+
+				user.timer.Enabled = false;
+				user.Dispose();
 			}
+			else
+			{
+				Console.WriteLine("Failed to handle reminder.");
+			}
+
 		}
 
 
@@ -253,9 +259,9 @@ namespace mastodonte_bot
 
 		#region Actions
 
-		public static void SendChat(SteamID sender, string message)
+		public static void SendChat(SteamID target, string message)
 		{
-			steamFriends.SendChatMessage(sender, EChatEntryType.ChatMsg, message);
+			steamFriends.SendChatMessage(target, EChatEntryType.ChatMsg, message);
 		}
 
 		// Mass announcement to friends list action? Risky.

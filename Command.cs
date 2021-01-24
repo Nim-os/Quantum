@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace mastodonte_bot
 {
@@ -54,6 +54,7 @@ namespace mastodonte_bot
 
 				float time = 0;
 				string unit = "";
+				double totalMinutes = 0;
 
 				try
 				{
@@ -75,10 +76,12 @@ namespace mastodonte_bot
 				if (options.Contains('m'))
 				{
 					unit = "minutes";
+					totalMinutes = time;
 				}
 				else if (options.Contains('h'))
 				{
 					unit = "hours";
+					totalMinutes = time * 60;
 				}
 				else
 				{
@@ -92,7 +95,34 @@ namespace mastodonte_bot
 					unit = unit.Substring(0, unit.Length - 1);
 				}
 
-				// TODO
+
+				var str = new StringBuilder();
+
+				for (int i = 1; i <arguments.Length; i++)
+				{
+					str.Append($"{arguments[i]} ");
+				}
+
+				if (str.Length == 0)
+				{
+					str.Append("No message given.");
+				}
+
+
+				var user = new User
+				{
+					userID = callback.Sender,
+					timer = new Timer(TimeSpan.FromMinutes(totalMinutes).TotalMilliseconds),
+					reminder = new Reminder
+					{
+						message = str.ToString(),
+					}
+				};
+
+				user.timer.Elapsed += (sender, e) => Bot.HandleReminder(user);
+				user.timer.AutoReset = false;
+				user.timer.Enabled = true;
+
 
 				Bot.SendChat(callback.Sender, $"Reminder successfully set. See you in {time} {unit}!");
 			});
