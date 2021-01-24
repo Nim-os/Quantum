@@ -98,12 +98,12 @@ namespace mastodonte_bot
 
 				var str = new StringBuilder();
 
-				for (int i = 1; i <arguments.Length; i++)
+				for (int i = 1; i < arguments.Length; i++)
 				{
 					str.Append($"{arguments[i]} ");
 				}
 
-				if (str.Length == 0)
+				if (string.IsNullOrWhiteSpace(str.ToString()))
 				{
 					str.Append("No message given.");
 				}

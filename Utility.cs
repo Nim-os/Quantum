@@ -122,7 +122,7 @@ namespace mastodonte_bot
 
 		public static string Sanitise()
 		{
-			// TODO
+			// TODO, do I need to though?
 			
 			return "";
 		}
