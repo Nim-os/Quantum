@@ -15,6 +15,8 @@ namespace mastodonte_bot
 
 		#endregion
 
+		#region Global
+
 		public static Bot instance = null;
 
 		public static SteamClient steamClient = new SteamClient();
@@ -22,8 +24,11 @@ namespace mastodonte_bot
 		public static SteamUser steamUser;
 		public static SteamFriends steamFriends;
 
-		private string username, password;
+		public static List<User> activeUsers = new List<User>(); // Maybe change to dict later
 
+		#endregion
+
+		private string username, password;
 		private bool isRunning;
 
 		private List<SteamID> admins;
@@ -109,6 +114,8 @@ namespace mastodonte_bot
 			while(isRunning)
 			{
 				manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
+
+				HandleUsers();
 			}
 
 			Console.WriteLine("Bot ended successfully.");
@@ -228,6 +235,21 @@ namespace mastodonte_bot
 			}
 
 		}
+
+
+		#region Handling
+
+		private void HandleUsers()
+		{
+			foreach (User user in activeUsers)
+			{
+				
+			}
+		}
+
+
+		#endregion
+
 
 		#region Actions
 
