@@ -20,16 +20,17 @@ namespace mastodonte_bot
 
 		});
 		*/
+
 		private static Dictionary<string, Command> RegularCommands()
 		{
 			Dictionary<string, Command> commands = new Dictionary<string, Command>();
 
-			
+			#region Commands
 
 			commands.Add("!help", (callback, options, arguments) =>
 			{
-				Bot.SendChat(callback.Sender, "Available commands:\n" +
-					"!ping, !reminder");
+				Bot.SendChat(callback.Sender, "Available commands:\n" + // Optional parts of a command potentially? Best way to indicate command use?
+					"!reminder -\\-\\ <time> <-minutes or -hours> <message>");
 			});
 
 			commands.Add("!hello", (callback, options, arguments) =>
@@ -44,9 +45,59 @@ namespace mastodonte_bot
 
 			commands.Add("!reminder", (callback, options, arguments) =>
 			{
-				Bot.SendChat(callback.Sender, "Unfortunately that service is not set up yet:( Check back later!");
-			}); 
-						
+				if (arguments.Length < 2)
+				{
+					Bot.SendChat(callback.Sender, "Not enough arguments for !reminder.\n" +
+						"Make sure to format your command as such: !reminder <time> <-minutes or -hours> <message>");
+					return;
+				}
+
+				float time = 0;
+				string unit = "";
+
+				try
+				{
+					time = float.Parse(arguments[0], System.Globalization.CultureInfo.InvariantCulture);
+				}
+				catch
+				{
+					Bot.SendChat(callback.Sender, "Number not correctly formatted in command.\n" +
+						"Be sure it is the first value after !reminder and is not connected to anything!");
+					return;
+				}
+
+				if (time < 1 || time > 120)
+				{
+					Bot.SendChat(callback.Sender, "Time cannot be less than 1 or greater than 120!");
+					return;
+				}
+
+				if (options.Contains('m'))
+				{
+					unit = "minutes";
+				}
+				else if (options.Contains('h'))
+				{
+					unit = "hours";
+				}
+				else
+				{
+					Bot.SendChat(callback.Sender, "Improper unit of time for reminder set!\n" +
+						"Make sure to include -minutes or -hours");
+					return;
+				}
+
+				if (time == 1)
+				{
+					unit = unit.Substring(0, unit.Length - 1);
+				}
+
+				// TODO
+
+				Bot.SendChat(callback.Sender, $"Reminder successfully set. See you in {time} {unit}!");
+			});
+
+			#endregion
 
 			return commands;
 		}
@@ -61,6 +112,8 @@ namespace mastodonte_bot
 		private static Dictionary<string, Command> AdminCommands()
 		{
 			Dictionary<string, Command> commands = new Dictionary<string, Command>();
+
+			#region Commands
 
 			commands.Add(".", (callback, options, arguments) =>
 			{
@@ -107,6 +160,8 @@ namespace mastodonte_bot
 				}
 				Bot.SendChat(callback.Sender, $"Options:\n{options}\n\nArguments:\n{args}");
 			});
+
+			#endregion
 
 			return commands;
 		}
