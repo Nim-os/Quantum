@@ -24,7 +24,7 @@ namespace mastodonte_bot
 		public static SteamUser steamUser;
 		public static SteamFriends steamFriends;
 
-		public static List<User> activeUsers = new List<User>(); // Maybe change to dict later. Would be good to overwrite if multiple of same user
+		//public static List<User> activeUsers = new List<User>(); // Maybe change to dict later. Would be good to overwrite if multiple of same user
 
 		#endregion
 

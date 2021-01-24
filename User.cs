@@ -13,10 +13,39 @@ namespace mastodonte_bot
 
 		public Reminder? reminder;
 
+		#region Disposing
+
+		private bool disposed = false;
+
 		public void Dispose()
 		{
-			timer.Dispose();
+			Dispose(true);
+
+			GC.SuppressFinalize(this);
 		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposed)
+			{
+				if (disposing)
+				{
+					timer.Dispose();
+				}
+
+				userID = null;
+				reminder = null;
+
+				disposed = true;
+			}
+		}
+
+		~User()
+		{
+			Dispose(false);
+		}
+
+		#endregion
 	}
 
 
