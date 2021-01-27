@@ -74,4 +74,9 @@ namespace mastodonte_bot
 		//public static bool RemoveEntry(SteamID user)
 	}
 
+	public class ConfigModel
+	{
+		public bool online { get; set; }
+		public bool debug { get; set; }
+	}
 }

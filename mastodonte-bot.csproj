@@ -11,13 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="adminlist.txt">
+    <None Update="mastodonte-bot\adminlist.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="config.json">
+    <None Update="mastodonte-bot\bot.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="secret.txt">
+    <None Update="mastodonte-bot\secret.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
