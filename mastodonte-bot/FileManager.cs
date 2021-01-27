@@ -14,8 +14,9 @@ namespace mastodonte_bot
 
 	static class FileManager
 	{
-		private const string secretPath = "secret.txt";
-		private const string adminListPath = "adminlist.txt";
+		private const string secretPath = "mastodonte-bot/secret.txt";
+		private const string adminListPath = "mastodonte-bot/adminlist.txt";
+		private const string configPath = "mastodonte-bot/bot.config";
 
 
 		public static LoginInfo? GetSecret()
