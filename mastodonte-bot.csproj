@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>mastodonte_bot</RootNamespace>
+    <AssemblyName>mastodonte-steam-bot</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
