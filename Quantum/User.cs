@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Timers;
 
-namespace mastodonte_bot
+namespace Quantum
 {
 	public class User : IDisposable
 	{

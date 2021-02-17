@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace mastodonte_bot
+namespace Quantum
 {
 	static class Utility
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SteamKit2;
 
-namespace mastodonte_bot
+namespace Quantum
 {
 	public class Bot
 	{
@@ -169,7 +169,7 @@ namespace mastodonte_bot
 		{
 			Console.WriteLine($"AccountInfo recieved. {callback.PersonaName} is active.");
 
-			//steamFriends.SetPersonaState(EPersonaState.Online);
+			steamFriends.SetPersonaState(EPersonaState.Online);
 		}
 
 		void OnFriendsList(SteamFriends.FriendsListCallback callback)

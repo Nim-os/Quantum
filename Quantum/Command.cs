@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Timers;
 
-namespace mastodonte_bot
+namespace Quantum
 {
 	// Can later change to Action<callback, options, arguments) if it makes a difference
 	public delegate void Command(SteamKit2.SteamFriends.FriendMsgCallback callback, string options, string[] arguments);

@@ -4,7 +4,7 @@ using System.Text;
 using SteamKit2;
 using System.IO;
 
-namespace mastodonte_bot
+namespace Quantum
 {
 	struct LoginInfo
 	{

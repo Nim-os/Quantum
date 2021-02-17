@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mastodonte_bot
+namespace Quantum
 {
 	class Program
 	{
